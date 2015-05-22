@@ -1,0 +1,52 @@
+8
+
+dir
+293
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050/trunk/Applications/MagicOracle/MagicOracle/cards/artifacts
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050
+
+
+
+2008-03-23T03:25:19.527059Z
+212
+adonalds
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e3098ba9-6243-0410-a084-be8a78d0660f
+
+EquipmentCard.java
+file
+
+
+
+
+2008-04-10T23:03:41.000000Z
+c8021262e7598ce2de9491282d6f1cf1
+2008-03-22T17:05:09.203491Z
+209
+bkraus
+
+ArtifactCard.java
+file
+
+
+
+
+2008-04-10T23:03:41.000000Z
+8b4e49ca95b51cbe954880aa0e5cff74
+2008-03-20T19:23:18.036496Z
+198
+adonalds
+

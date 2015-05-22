@@ -1,0 +1,239 @@
+"""
+Prints a confusion matrix for the user
+"""
+from Logger import Logger
+import Numeric
+
+class ConfusionMatrix(object):
+    """    
+    Example Usage:    
+    >>> pv = [1,1,1,1,1,1]    
+    >>> tv = [1,1,1,1,2,1]
+    >>> classes = []    
+    >>> cm = ConfusionMatrix(pv, tv, classes)
+    >>> cm.display()
+           1      2      
+    1      5      0      
+    2      1      0      
+    ==========================================
+    Correctly classified:   5   
+    Incorrectly classified:   1   
+    Successfully classified:    83.33   %   
+
+
+    >>> cm.display(precision = 3, minSpaces = 1)
+       1  2  
+    1  5  0  
+    2  1  0  
+    ==========================================
+    Correctly classified:   5   
+    Incorrectly classified:   1   
+    Successfully classified:    83.333   %   
+
+    You can also just get the percent correct
+    >>> correct = cm.getPercentCorrect()
+    >>> print '%.6f' % correct
+    0.833333
+    
+
+    Example Error Handling:    
+    >>> pv = [1]
+    >>> cm = ConfusionMatrix(pv, tv, classes)    
+    ( ConfusionMatrix: build ) ERROR: Incompatible lists
+    >>> tv = [2]    
+    >>> cm = ConfusionMatrix(pv, tv, classes)
+    >>> classes = []
+    >>> cm = ConfusionMatrix(pv, tv, classes)
+    >>> pv = 2
+    >>> cm = ConfusionMatrix(pv, tv, classes)
+    ( ConfusionMatrix : init ) Error: Predicted Values must be a list
+    ( ConfusionMatrix: build ) ERROR: Incompatible lists
+    >>> tv = 2
+    >>> pv = [2]
+    >>> cm = ConfusionMatrix(pv, tv, classes)
+    ( ConfusionMatrix : init ) Error: True Values must be a list
+    ( ConfusionMatrix: build ) ERROR: Incompatible lists
+    """
+    
+    def __init__( self, predictedValues, trueValues, classes = []) :
+        """
+        Constructor
+        predictedValues: The values predicted by the user
+        trueValues: The correct results
+        classes: The classes in the classification
+        """
+        #Creates the log
+        self.log = Logger(1,1)
+        #Initializes the values to use the provided value lists
+        if(isinstance(predictedValues, list)):
+            self.predictedValues = predictedValues
+        else:
+            self.log.write("Error: Predicted Values must be a list", 1, "ConfusionMatrix : init")
+            self.predictedValues = []
+
+        if(isinstance(trueValues, list)):
+            self.trueValues = trueValues
+        else:
+            self.log.write("Error: True Values must be a list", 1, "ConfusionMatrix : init")
+            self.trueValues = []
+        self.correct = 0
+        self.incorrect = 0
+        #If the class wasn't sent in correctly
+        if(len(classes) <= 0):
+        #Calculate it
+            self.calculateClasses()
+        self.classes = classes
+        self.confusionMatrix = Numeric.zeros([len(classes),len(classes)]) 
+        self.build()
+
+    def calculateClasses(self):
+        """
+        If the classes weren't passed in then this method can be called to calculate them. It parses through the two lists and finds all unique values
+        """
+        self.classes = []
+        for i in self.predictedValues:
+            found = 1
+            for j in self.classes:
+                if(i == j):
+                    found = 0
+            if(found == 1):
+                self.classes.append(i)
+
+        for i in self.trueValues:
+            found = 1
+            for j in self.classes:
+                if(i == j):
+                    found = 0
+            if(found == 1):
+                self.classes.append(i)
+        return self.classes
+
+    def addRecord(self, pv, tv):
+        """
+        Accepts a predicted value and a true value to add to the confusion matrix
+        """
+        self.predictedValues.append(pv)
+        self.trueValues.append(tv)
+
+    def build(self):
+        """
+        Builds the confusion matrix given the two lists
+        """
+        if(len(self.classes) == 0):
+            self.calculateClasses()
+            self.confusionMatrix = Numeric.zeros([len(self.classes),len(self.classes)])
+        if(len(self.trueValues) == len(self.predictedValues)):
+            counter=0
+            for i in self.trueValues:
+                #Finds the corresponding value in the classes list. Since the classes list is used as the labels it corresponds to the correct location in the confusion matrix.
+                if(self.classes.count(i)>0):
+                    self.confusionMatrix[self.classes.index(i)][self.classes.index(self.predictedValues[counter])]+=1        
+                    if(self.classes.index(i) == self.classes.index(self.predictedValues[counter])):
+                        self.correct+=1
+                    else:
+                        self.incorrect+=1
+                    counter+=1
+                else:
+                    self.log.write("ERROR: Class list does not contain all values", 1, "ConfusionMatrix: build()")
+        else:
+            self.log.write("ERROR: Incompatible lists",1,"ConfusionMatrix: build")
+            
+    def getPercentCorrect(self):
+        """returns the percent correct without displaying the matrix"""
+        if(self.correct+self.incorrect<=0):
+            raise ValueError, 'ERROR: Confusion Matrix contained no values'
+        return float(self.correct)/(self.correct+self.incorrect)
+
+    def display(self, precision = 2, minSpaces = 6): 
+        """
+        Displays the confusion matrix to stdout
+        """
+        if(precision<0):
+            raise ValueError, 'precision must be >= 0'
+            
+        minSpace = minSpaces
+        if(minSpaces < 2):
+            minSpace = 2
+        
+        #preprocess data to find longest string so columns line up
+        maxLength = 1
+        for i in self.classes:
+            length = len(str(i))
+            if length > maxLength:
+                maxLength = length
+        for i in self.confusionMatrix:
+            for j in i:
+                length = len(str(j))
+                if length > maxLength:
+                    maxLength = length
+               
+        spaceStr = ""
+        for i in range(minSpace-2):
+            spaceStr = spaceStr + " "
+
+        if(self.correct+self.incorrect>0):
+            temp = [str(" ").ljust(maxLength)]
+            for i in self.classes:
+                    temp.append(str(i).ljust(maxLength))
+            self.log.writeList(temp, 0, spaceStr)
+            counter = 0
+            for i in self.confusionMatrix:
+                temp = [str(self.classes[counter]).ljust(maxLength)]
+                for j in i:
+                    temp.append(str(j).ljust(maxLength))
+                self.log.writeList(temp, 0, spaceStr)
+                counter+=1
+            correct = ["Correctly classified:",self.correct]
+            incorrect = ["Incorrectly classified:",self.incorrect]
+            
+            #Round to specified decimal places
+            format = '%.' + str(precision) + 'f'
+            percentCorrect = float(self.correct)/(self.correct+self.incorrect)
+            percentCorrectStr = format % (percentCorrect*100)
+            
+            #total = ["Successfully classified: ",int(float(self.correct)/(float(self.correct)+float(self.incorrect))*10000.0)/100.0 , "%"]
+            total = ["Successfully classified: ",percentCorrectStr, "%"]
+            self.log.write("==========================================",0)
+            self.log.writeList(correct,0)
+            self.log.writeList(incorrect,0)
+            self.log.writeList(total,0)
+        else:
+            self.log.write("ERROR: Confusion Matrix contained no values",1,"ConfusionMatrix: display()")
+
+    def displayToFile(self, fileName):
+        """
+        Outputs the confusion matrix to an output file
+        fileName: The file in which to output the confusion matrix.
+        """
+        if(self.correct+self.incorrect>0):
+            temp = [""]
+            for i in self.classes:
+                temp.append(i)
+            self.log.writeListToFile(temp, 0,fileName, "\t")
+            counter = 0
+            for i in self.confusionMatrix:
+                temp = [self.classes[counter]]
+                for j in i:
+                    temp.append(j)
+                self.log.writeListToFile(temp, 0, fileName, "\t")
+                counter+=1
+            correct = ["Correctly classified:",self.correct]
+            incorrect = ["Incorrectly classified:",self.incorrect]
+            total = ["Successfully classified: ",float(self.correct)/(float(self.correct)+float(self.incorrect))*100 , "%"]
+            self.log.writeToFile("==========================================",0, fileName)
+            self.log.writeListToFile(correct,0, fileName)
+            self.log.writeListToFile(incorrect,0, fileName)
+            self.log.writeListToFile(total,0, fileName)
+        else:
+            self.log.write("ERROR: Confusion Matrix contained no values",1,"ConfusionMatrix: displayToFile()")
+            
+def _test():
+    """Run the tests in the documentation strings."""
+    import doctest
+    return doctest.testmod(verbose=True)
+
+if __name__ == "__main__":
+    try:
+        __IP                            # Are we running IPython?
+    except NameError:
+        _test()                         # If not, run the tests

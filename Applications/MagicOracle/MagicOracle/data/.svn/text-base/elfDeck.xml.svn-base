@@ -1,0 +1,217 @@
+<deck name="Elf">
+	<card name="Forest" number="14" type = "land" subtype = "basic">
+		<ability name="play" type="activated">
+			<cost value="" additionalCosts="FirstMana" />
+			<effect name="DiscardCard" />
+			<effect name="AddLand" />
+			<effect name="PlayedLand" />
+		</ability>
+		<ability name="tapForMana" type="activated">
+			<cost value="" additionalCosts="TapSelf" />
+			<effect name="AddGreen" />
+			<effect name="TapSelf" />
+		</ability>
+	</card>
+	<card name="Swamp" number="7" type="land" subtype="basic">
+		<ability name="play" type="activated">
+			<cost value="" additionalCosts="FirstMana"/>
+			<effect name="DiscardCard" />
+			<effect name="AddLand" />
+			<effect name="PlayedLand" />
+		</ability>
+		<ability name="tapForMana" type="activated">
+			<cost value="" additionalCosts="TapSelf" />
+			<effect name="AddBlack" />
+			<effect name="TapSelf" />
+		</ability>		
+	</card>
+	<card name="Elvish Harbinger" number="4" type="creature" power="1" toughness="2" subtype="Elf Druid">
+		<ability name="play" type="activated">
+			<cost value="ccg" />
+			<effect name="SubGreen" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+			<effect name="PutElfCardOnTop" />
+		</ability>
+		<ability name="tapForMana" type="activated">
+			<cost value="" additionalCosts="TapSelf" />
+			<effect name="TapSelf" />
+			<effect name="AddAnyColor" />
+		</ability>
+	</card>
+	<card name="Lys Alana Huntmaster" number="3" type="creature" power="3" toughness="3" subtype="Elf Warrior">
+		<ability name="play" type="activated">
+			<cost value="ccgg" />
+			<effect name="SubGreen" />
+			<effect name="SubGreen" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+		<ability name="triggered"  type="creatureEntersPlay">
+			<effect name="AddElfWarriorToken" />
+		</ability>
+	</card>
+	<card name="Immaculate Magistrate" number="4" type="creature" power="2" toughness="2" subtype="Elf Shaman">
+		<ability name="play" type="activated">
+			<cost value="cccg" />
+			<effect name="SubGreen" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+		<ability name="AddOneOneNumElves" type="triggered">
+			<cost value="" />
+			<effect name="AddPowerNumElves" />
+			<effect name="AddToughNumElves" />
+		</ability>
+	</card>
+	<card name="Llanowar Elves" number="4" type="creature" power="1" toughness="1" subtype="Elf Druid">
+		<ability name="play" type="activated">
+			<cost value="g" />
+			<effect name="SubGreen" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+		<ability name="tapForMana" type="activated">
+			<cost value="" additionalCosts="TapSelf" />
+			<effect name="TapSelf" />
+			<effect name="AddGreen" />
+		</ability>
+	</card>
+	<card name="Imperious Perfect" number="4" type="creature" power="2" toughness="2" subtype="Elf Warrior">
+		<ability name="play" type="activated">
+			<cost value="ccg" />
+			<effect name="SubGreen" />
+			<effect name="SubGreen" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+			<!-- Here we're going to add one power and toughness to every 
+			creature, but the Imperious Perfect doesn't get +1/+1 to itself, so
+			we're also going to remove one from it-->
+			<effect name="AddOnePowerAllElves" />
+			<effect name="AddOneToughAllElves" />
+			<effect name="MinusOnePowerToCreature" />
+			<effect name="MinusOneToughToCreature" />
+		</ability>
+		<ability name="creatureEntersPlay"  type="triggered">
+			<effect name="AddOnePowerToElf" />
+			<effect name="AddOneToughToElf" />
+		</ability>
+		<ability name="leavePlay" type="triggered">
+			<effect name="MinusOnePowerAllElves" />
+			<effect name="MinusOneToughAllElves" />
+		</ability>
+		<ability name="createElfToken" type="activated">
+			<cost value="g" additionalCosts="TapSelf" />
+			<effect name="SubGreen" />
+			<effect name="TapSelf" />
+			<effect name="AddElfWarriorToken" />
+		</ability>
+	</card>
+	<card name="Eyeblight's Ending" number="4" type="instant" subtype="Elf">
+		<ability name="play" type="activated">
+			<cost value="ccb" />
+			<effect name="SubBlack" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="KillNonElf" />
+		</ability>
+	</card>
+	<card name="Elvish Promenade" number="4" type="sorcery" subtype="Elf">
+		<ability name="play" type="activated">
+			<cost value="cccg" />
+			<effect name="SubBlack" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddElfWarriorTokenNumElves" />
+		</ability>
+	</card>
+	<card name="Jagged-Scar Archers" number="4" type="creature" power="1" toughness="1" subtype="Elf Archer">
+		<ability name="play" type="activated">
+			<cost value="cgg" />
+			<effect name="SubGreen" />
+			<effect name="SubGreen" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+		<ability name="creatureEntersPlay" type="triggered">
+			<effect name="AddOnePowerIfElf" />
+			<effect name="AddOneToughIfElf" />
+		</ability>
+		<ability name="creatureLeavesPlay" type="triggered">
+			<effect name="SubOnePowerIfElf" />
+			<effect name="SubOneToughIfElf" />
+		</ability>
+		<ability name="enchantmentEntersPlay" type="triggered">
+			<effect name="AddOnePowerIfElf" />
+			<effect name="AddOneToughIfElf" />
+		</ability>
+		<ability name="enchantmentLeavesPlay" type="triggered">
+			<effect name="SubOnePowerIfElf" />
+			<effect name="SubOneToughIfElf" />
+		</ability>
+		<ability name="damageFlier" type="activated">
+			<cost value="" additionalCosts="TapSelf" />
+			<effect name="TapSelf" />
+			<effect name="DealPowerDamageToFlier" />
+		</ability>
+	</card>
+	<card name="Vigor" number="4" type="creature" power="6" toughness="6" subtype="Elemental Incarnation">
+		<staticAbilities name="trample"/>
+		<ability name="play" type="activated">
+			<cost value="cccggg" />
+			<effect name="SubGreen" />
+			<effect name="SubGreen" />
+			<effect name="SubGreen" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+			<effect name="AddVigorEffectToAllCreatures" />
+		</ability>
+		<ability name="creatureEntersPlay" type="triggered">
+			<effect name="AddVigorEffectToCreature" />
+		</ability>
+		<ability name="leavePlay" type="triggered">
+			<effect name="ShuffleIntoLibrary" />
+		</ability>
+	</card>
+	<card name="Garruk Wildspeaker" number="4" type="planeswalker" loyalty="3">
+		<ability name="play" type="activated">
+			<cost value="ccgg" />
+			<effect name="SubGreen" />
+			<effect name="SubGreen" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddPlaneswalker" />
+		</ability>
+		<ability name="UntapLands" type="activated">
+			<effect name="AddCounter" />
+			<effect name="UntapTwoLands" />
+		</ability>
+		<ability name="AddBeast" type="activated">
+			<effect name="RemoveCounter" />
+			<effect name="AddGreenBeastToken" />
+		</ability>
+		<ability name="BeefAllCreatures" type="activated" >
+			<effect name="RemoveCounter" />
+			<effect name="RemoveCounter" />
+			<effect name="RemoveCounter" />
+			<effect name="RemoveCounter" />
+			<effect name="BeefAllCreaturesGarruk" />
+		</ability>
+	</card>
+</deck>

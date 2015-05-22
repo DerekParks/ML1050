@@ -1,0 +1,67 @@
+8
+
+dir
+293
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050/trunk/Applications/MagicOracle/doc
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050
+
+
+
+2008-03-11T04:28:41.686017Z
+178
+bkraus
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e3098ba9-6243-0410-a084-be8a78d0660f
+
+MagicOracle - CRC.pdf
+file
+
+
+
+
+2008-04-10T23:03:27.000000Z
+87c37f15cfb160a984e74ca443c9d961
+2008-03-11T03:09:41.681401Z
+177
+adonalds
+has-props
+
+UML_v2.JPG
+file
+
+
+
+
+2008-04-10T23:03:27.000000Z
+90d4f32e919ef4cd8a4d2e09b8844fec
+2008-03-06T21:36:24.541758Z
+171
+bkraus
+has-props
+
+UML_v3.jpg
+file
+
+
+
+
+2008-04-10T23:03:27.000000Z
+9e731740b820e46309e2ec9dd322a3b1
+2008-03-11T04:28:41.686017Z
+178
+bkraus
+has-props
+

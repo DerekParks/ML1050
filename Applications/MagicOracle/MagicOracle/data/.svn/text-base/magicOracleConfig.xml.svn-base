@@ -1,0 +1,10 @@
+<getItOn>
+	<trainingSet numGames = "1000">
+		<player1 deckName="Kithkin" strategy="KithkinStrategy" outputFile="kithkinResults.txt"/>
+		<player2 deckName="Elf" strategy="ElfStrategy" outputFile="elfResults.txt"/>
+	</trainingSet>
+	<trainingSet numGames = "1000">
+		<player1 deckName="Kithkin" strategy="DrunkKithkinStrategy" outputFile="drunkResults.txt"/>
+		<player2 deckName="Elf" strategy="OwenStrategy" outputFile="owenResults.txt"/>
+	</trainingSet>
+</getItOn>

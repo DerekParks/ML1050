@@ -1,0 +1,55 @@
+8
+
+dir
+293
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050/trunk/External
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050
+
+
+
+2008-04-10T22:09:14.624286Z
+261
+tdavies
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e3098ba9-6243-0410-a084-be8a78d0660f
+
+__init__.py
+file
+
+
+
+
+2008-04-10T23:03:22.000000Z
+d41d8cd98f00b204e9800998ecf8427e
+2008-02-12T20:06:00.777451Z
+102
+nbrunhar
+
+libsvm285
+dir
+
+SVM.py
+file
+
+
+
+
+2008-04-10T23:03:23.000000Z
+5220e9c7726c76bab98d2fcd04bd607a
+2008-04-10T22:09:14.624286Z
+261
+tdavies
+

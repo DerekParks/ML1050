@@ -1,0 +1,167 @@
+<deck name="Kithkin">
+	<card name="Plains" number="21" type = "land" subtype = "basic">
+		<ability name="play" type="activated">
+			<cost value="" additionalCosts="FirstMana" />
+			<effect name="DiscardCard" />
+			<effect name="AddLand" />
+			<effect name="PlayedLand" />
+		</ability>
+		<ability name="tapForMana" type="activated">
+			<cost value="" additionalCosts="TapSelf" />
+			<effect name="AddWhite" />
+			<effect name="TapSelf" />
+		</ability>
+	</card>
+	<card name="Goldmeadow Stalwart" number="4" type="creature" power="2" toughness="2" subtype="Kithkin Soldier">
+		<ability name="play" type="activated">
+			<cost value="w"/>
+			<effect name="SubWhite" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+	</card>
+	<card name="Mosquito Guard" number="4" type="creature" power="1" toughness="1" subtype="Kithkin Soldier" >
+		<staticAbilities name="firstStrike" />
+		<ability name="play" type="activated">
+			<cost value="w" />
+			<effect name="SubWhite" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+	</card>
+	<card name="Knight of Meadowgrain" number="4" type="creature" power="2" toughness="2" subtype="Kithkin Knight">
+		<staticAbilities name="firstStrike,lifelink"/>
+		<ability name="play" type="activated">
+			<cost value="ww" />
+			<effect name="SubWhite" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+	</card>
+	<card name="Wizened Cenn" number="4" type="creature" power="2" toughness="2" subtype="Kithkin Cleric">
+		<ability name="play" type="activated">
+			<cost value="ww" />
+			<effect name="SubWhite" />
+			<effect name="SubWhite" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+			<!-- Here we're going to add one power and toughness to every 
+			creature, but the Wizened Cenn doesn't get +1/+1 to itself, so
+			we're also going to remove one from it-->
+			<effect name="AddOnePowerAllKithkin" />
+			<effect name="AddOneToughAllKithkin" />
+			<effect name="MinusOnePowerToCreature" />
+			<effect name="MinusOneToughToCreature" />
+		</ability>
+		<ability name="creatureEntersPlay"  type="triggered">
+			<effect name="AddOnePowerToKithkin" />
+			<effect name="AddOneToughToKithkin" />
+		</ability>
+		<ability name="leavePlay" type="triggered">
+			<effect name="MinusOnePowerAllKithkin" />
+			<effect name="MinusOneToughAllKithkin" />
+		</ability>
+	</card>
+	<card name="Militia's Pride" number="4" type="enchantment" subtype="Kithkin">
+		<ability name="play" type="activated">
+			<cost value="cw" />
+			<effect name="SubWhite" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddEnchantment" />
+		</ability>
+		<ability name="addKithkinToken" type="activated">
+			<cost value="w" additionalCosts="CreatureAttacking"/>
+			<effect name="SubWhite" />
+			<effect name="AddKithkinSoldierTokenAttacking" />
+		</ability>
+	</card>
+	<card name="Door of Destinies" number="3" type="artifact" subtype="">
+		<ability name="play" type="activated">
+			<cost value="cccc" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddArtifact" />
+		</ability>
+		<ability name="creatureEntersPlay" type="triggered">
+			<effect name="AddNumCountersKithkinPower" />
+			<effect name="AddNumCountersKithkinTough" />
+			<effect name="AddCounterIfKithkin" />
+		</ability>
+		<ability name="enchantmentEntersPlay" type="triggered">
+			<effect name="AddCounterIfKithkin" />
+		</ability>
+		<ability name="artifactEntersPlay" type="triggered">
+			<effect name="AddCounterIfKithkin" />
+		</ability>
+		<ability name="instantEntersPlay" type="triggered">
+			<effect name="AddCounterIfKithkin" />
+		</ability>
+		<ability name="sorceryEntersPlay" type="triggered">
+			<effect name="AddCounterIfKithkin" />
+		</ability>
+	</card>
+	<card name="Kinsbaile Borderguard" number="4" type="creature" power="1" toughness="1" subtype="Kithkin Soldier">
+		<ability name="play" type="activated">
+			<cost value="cww" />
+			<effect name="SubWhite" />
+			<effect name="SubWhite" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+			<effect name="AddCountersNumKithkin" />
+		</ability>
+		<ability name="leavePlay" type="triggered">
+			<effect name="AddKithkinSoldierTokenNumCounters" />
+		</ability>
+	</card>
+	<card name="Surge of Thoughtweft" number="4" type="instant" subtype="Kithkin">
+		<ability name="play" type="activated">
+			<cost value="cw" />
+			<effect name="SubWhite" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddOnePowerAllCreaturesForTurn" />
+			<effect name="AddOneToughAllCreaturesForTurn" />
+			<effect name="DrawCardIfHaveKithkin" />
+		</ability>
+	</card>
+	<card name="Kithkin Zephyrnaut" number="4" type="creature" power="2" toughness="2" subtype="Kithkin Soldier">
+		<ability name="play" type="activated">
+			<cost value="ccw" />
+			<effect name="SubWhite" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddCreature" />
+		</ability>
+		<ability name="draw" type="triggered">
+			<effect name="BeefZephyrnautIfKinship" />
+		</ability>
+	</card>
+	<card name="Veteran's Armaments" number="4" type="artifact" subtype="Soldier Equipment">
+		<ability name="play" type="activated">
+			<cost value="cc" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="DiscardCard" />
+			<effect name="AddArtifact" />
+		</ability>
+		<ability name="equip" type="activated">
+			<cost value="cc" />
+			<effect name="SubColorless" />
+			<effect name="SubColorless" />
+			<effect name="EquipToCreature" />			
+		</ability>
+		<ability name="freeEquip" type="creatureEntersPlay">
+			<effect name="FreeEquipToSoldier" />
+		</ability>
+		<ability name="attackersChosen" type="triggered">
+			<effect name="AddPowerNumAttackers" />
+			<effect name="AddToughNumAttackers" />		
+		</ability>
+	</card>
+</deck>

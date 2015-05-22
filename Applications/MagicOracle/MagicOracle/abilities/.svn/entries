@@ -1,0 +1,40 @@
+8
+
+dir
+293
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050/trunk/Applications/MagicOracle/MagicOracle/abilities
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050
+
+
+
+2008-04-03T22:33:40.133972Z
+240
+adonalds
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e3098ba9-6243-0410-a084-be8a78d0660f
+
+Ability.java
+file
+
+
+
+
+2008-04-10T23:03:39.000000Z
+e40d79d5baeea9a7e43d66acfe730904
+2008-04-03T22:33:40.133972Z
+240
+adonalds
+

@@ -1,0 +1,40 @@
+8
+
+dir
+293
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050/trunk/Applications/MagicOracle/MagicOracle/cards/lands
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050
+
+
+
+2008-04-02T05:16:39.589221Z
+237
+adonalds
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e3098ba9-6243-0410-a084-be8a78d0660f
+
+LandCard.java
+file
+
+
+
+
+2008-04-10T23:03:41.000000Z
+0b2aa5d4bb6e3bbc69198937cb860ab3
+2008-04-02T05:16:39.589221Z
+237
+adonalds
+

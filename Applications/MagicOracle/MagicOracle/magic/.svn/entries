@@ -1,0 +1,70 @@
+8
+
+dir
+293
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050/trunk/Applications/MagicOracle/MagicOracle/magic
+svn+ssh://dparks@alamode.mines.edu/home/mcolagro/APC/ML1050
+
+
+
+2008-04-17T19:25:24.808884Z
+283
+adonalds
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e3098ba9-6243-0410-a084-be8a78d0660f
+
+effects
+dir
+
+MagicOracle.java
+file
+
+
+
+
+2008-04-10T23:03:38.000000Z
+91b0ae28ba449150bd211a484a8c8cab
+2008-04-02T05:16:39.589221Z
+237
+adonalds
+
+Game.java
+file
+
+
+
+
+2008-04-18T08:26:52.000000Z
+eaf6e033137a9ccf9cf44bdd7d810abe
+2008-04-17T19:25:24.808884Z
+283
+adonalds
+
+costs
+dir
+
+Player.java
+file
+
+
+
+
+2008-04-18T08:26:52.000000Z
+b741c6be2611dba8ef26ff4400d40e61
+2008-04-17T19:25:24.808884Z
+283
+adonalds
+

@@ -1,0 +1,13 @@
+import wave
+import sys
+import struct
+
+
+# open the wave file
+fp = wave.open(sys.argv[1],"rb")
+sample_rate = fp.getframerate()
+total_num_samps = fp.getnframes()
+binData = fp.readframes(total_num_samps)
+fft_length = 4096
+num_fft = (total_num_samps / fft_length ) - 2
+binData = array(struct.unpack("%dB"%(len(binData)), binData),Float)-128

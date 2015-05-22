@@ -1,0 +1,255 @@
+################################################################################
+#                                                                              #
+# This file is intended to be a reference point for the original               #
+# machine learning algorithms written in Spring 2007 by the authors            #
+#                                                                              #
+# Alan Donaldson                                                               #
+# Chris Hill                                                                   #
+# Brandon Kraus                                                                #
+# Ivo Yueh                                                                     #
+# Teddy Yueh                                                                   #
+#                                                                              #
+# This file will be used as a reference point for strengths and weaknesses of  #
+# their respective implementations of the k-nearest neighbor, naive bayes, and #
+# decision tree algorithms.                                                    #
+#                                                                              #
+################################################################################
+
+--------------------------------------------------------------------------------
+- KNN                                                                          -
+--------------------------------------------------------------------------------
+-     Strengths                                                                -
+--------------------------------------------------------------------------------
+-          Written to be somewhat object oriented. Class attributes -          -
+-          contain classification scores and labels to prevent      -          -
+-          complicated list structures and references.              -          -
+---------------------------------------------------------------------	Ivo    -
+-          Code logic and flow is well commented for conceptual     -          -
+-          reflections.                                             -          -
+---------------------------------------------------------------------          -
+-          Prints own confusion matrix.                             -          -
+--------------------------------------------------------------------------------
+-          This algorithm was simple and to the point.              -          -
+---------------------------------------------------------------------          -
+-          It is also guaranteed to find the k closest points on    - Brandon  -
+-          any point.                                               -          -
+---------------------------------------------------------------------          -
+-          Prints own confusion matrix.                             -          -
+--------------------------------------------------------------------------------
+-          Short, Sweet, and to the Point.                          -          -
+---------------------------------------------------------------------          -
+-          Guaranteed to find the correct result.                   -   Alan   -
+---------------------------------------------------------------------          -
+-          Very Dynamic, can be used for any data size.             -          -
+---------------------------------------------------------------------          -
+-          Prints own confusion matrix.                             -          -
+---------------------------------------------------------------------          -
+-          Very well commented.                                     -          -
+--------------------------------------------------------------------------------
+-          Accepts any number of data fields, classes, data points. -          -
+---------------------------------------------------------------------          -
+-          Confusion matrix is its own variable, not just formed    -          -
+-          and printed from other variables.                        -          -
+---------------------------------------------------------------------  Teddy   -
+-          Already applies a weight concept in classify() function; -          -
+-          easier for boosting?                                     -          -
+---------------------------------------------------------------------          -
+-          Assures correct argument count.                          -          -
+--------------------------------------------------------------------------------
+-     Weaknesses                                                               -
+--------------------------------------------------------------------------------
+-          Although only K nearest neighbors determine              -          -
+-          classification, all neighbors are considered.  Highly    -          -
+-          inefficient.                                             -          -
+---------------------------------------------------------------------   Ivo    -
+-          Does not allow attribute weighting.                      -          -
+---------------------------------------------------------------------          -
+-          Only considers Euclidean distance attribute.             -          -
+--------------------------------------------------------------------------------
+-          Poorly commented                                         -          -
+---------------------------------------------------------------------          -
+-          Only coded to handle 2-class or 3-class classification,  - Brandon  -
+-          and does not handle 2-class classification gracefully    -          -
+---------------------------------------------------------------------          -
+-          Inefficient                                              -          -
+--------------------------------------------------------------------------------
+-          Bubble Sort is used for all sorting. This could be       -          -
+-          optimized by using a faster sorting algorithm.           -          -
+---------------------------------------------------------------------   Alan   -
+-          Code is reused in the validate classify. This needs to   -          -
+-          be cleaned up.                                           -          -
+--------------------------------------------------------------------------------
+-          May print unaligned confusion matrices.                  -          -
+---------------------------------------------------------------------  Teddy   -
+-          Only deals with Euclidean distance                       -          -
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+- Naive Bayes                                                                  -
+--------------------------------------------------------------------------------
+-     Strengths                                                                -
+--------------------------------------------------------------------------------
+-          Can handle multiple values for each attribute            -          -
+-          (i.e. more than y/n)                                     -          -
+---------------------------------------------------------------------	       -
+-          Can handle any number/word/letter as property value      -  Chris   -
+---------------------------------------------------------------------          -
+-          Uses data members to reduce passing of parameters        -          -
+---------------------------------------------------------------------          -
+-          Test prints very easy to read confusion matrix           -          -
+--------------------------------------------------------------------------------
+-          Contains exception handling.                             -          -
+---------------------------------------------------------------------	       -
+-          Handles multiple attributes.                             -          -
+---------------------------------------------------------------------          -
+-          Uses data members to reduce passing of parameters        -   Ivo    -
+---------------------------------------------------------------------          -
+-          Uses dictionaries                                        -          -
+---------------------------------------------------------------------          -
+-          Prints own confusion matrix.                             -          -
+--------------------------------------------------------------------------------
+-          Efficient probability computation                        -          -
+---------------------------------------------------------------------          -
+-          Prints own confusion matrix.                             -          -
+--------------------------------------------------------------------- Brandon  -
+-          Uses dictionaries                                        -          -
+---------------------------------------------------------------------          -
+-          Can handle dynamic number of classes to classify under   -          -
+--------------------------------------------------------------------------------
+-          Uses TrainingSet instead of pyML                         -          -
+---------------------------------------------------------------------          -
+-          Completely dynamic                                       -   Alan   -
+---------------------------------------------------------------------          -
+-          Very well commented.                                     -          -
+--------------------------------------------------------------------------------
+-          Accepts any number of data fields, classes, data points. -          -
+---------------------------------------------------------------------          -
+-          Confusion matrix is its own variable, not just formed    -          -
+-          and printed from other variables.                        -  Teddy   -
+---------------------------------------------------------------------          -
+-          Assures correct argument count.                          -          -
+---------------------------------------------------------------------          -
+-          Commented well; 1 data structure to hold posteriors.     -          -
+--------------------------------------------------------------------------------
+-     Weaknesses                                                               -
+--------------------------------------------------------------------------------
+-          Hardcoded for mushrooms dataset                          -          -
+-          (i.e. only handles 2 classes which are p and e)          -          -
+---------------------------------------------------------------------  Chris   -
+-          Code is monolithic (only 3 procedures: Init, Train, Test)-          -
+---------------------------------------------------------------------          -
+-          No built in unit tests                                   -          -
+--------------------------------------------------------------------------------
+-          Potentially complicateted equations and structures are   -          -
+-          not well explained and can be difficult to follow.       -   Ivo    -
+---------------------------------------------------------------------          -
+-          Not commented well.                                      -          -
+--------------------------------------------------------------------------------
+-          Poor commenting                                          -          -
+---------------------------------------------------------------------          -
+-          No error handling.  If the data isn't perfectly          - Brandon  -
+-          formatted or if there are any problems, they aren't      -          -
+-          handled within the code.                                 -          -
+--------------------------------------------------------------------------------
+-          The data structure used decreases the performance of the -          -
+-          algorithm. One of the functions runs in O(n^3) and       -          -
+-          another in O(n^4) as a result.                           -          -
+---------------------------------------------------------------------   Alan   -
+-          Confusion matrix code is reused. Function calls would    -          -
+-          need to be changed.                                      -          -
+--------------------------------------------------------------------------------
+-          May print unaligned confusion matrices.                  -          -
+---------------------------------------------------------------------          -
+-          Runs through entire dataset in search of classes for     -          -
+-          confusion matrices before training; slightly inefficient -  Teddy   -
+---------------------------------------------------------------------          -
+-          No unit testing                                          -          -
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+- Decision Tree                                                                -
+--------------------------------------------------------------------------------
+-     Strengths                                                                -
+--------------------------------------------------------------------------------
+-          Test prints very easy to read confusion matrix           -          -
+---------------------------------------------------------------------          -
+-          Can handle any number/word/letter as property value      -          -
+---------------------------------------------------------------------  Chris   -
+-          Can handle more than 2 classes                           -          -
+---------------------------------------------------------------------          -
+-          Can handle more than 2 results for each attribute        -          -
+-          (i.e. more y/n)                                          -          -
+--------------------------------------------------------------------------------
+-          Functional logic well distributed and separated amongst  -          -
+-          methods.                                                 -          -
+---------------------------------------------------------------------	       -
+-          Handles multiple attributes.                             -          -
+---------------------------------------------------------------------   Ivo    -
+-          Uses data members to reduce passing of parameters.       -          -
+---------------------------------------------------------------------          -
+-          Uses dictionaries.                                       -          -
+---------------------------------------------------------------------          -
+-          Prints own confusion matrix.                             -          -
+--------------------------------------------------------------------------------
+-          Functionality is split logically amongst all the methods -          -
+---------------------------------------------------------------------          -
+-          Handles a dynamic threshold                              - Brandon  -
+---------------------------------------------------------------------          -
+-          Can handle a dynamic number of classes                   -          -
+--------------------------------------------------------------------------------
+-          Very object oriented. The node class runs much of the    -          -
+-          algorithm.                                               -          -
+---------------------------------------------------------------------          -
+-          Anything outside of node is very short and sweet, which  -   Alan   -
+-          reduces complexity.                                      -          -
+---------------------------------------------------------------------          -
+-          Also uses TrainingSet instead of pyML.                   -          -
+--------------------------------------------------------------------------------
+-          Runs recursively to reduce code complexity.              -          -
+--------------------------------------------------------------------------------
+-          Accepts any number of data fields, classes, data points  -          -
+---------------------------------------------------------------------          -
+-          Confusion matrix is its own variable, not just formed    -          -
+-          and printed from other variables.                        -  Teddy   -
+---------------------------------------------------------------------          -
+-          Functionality well divided among methods                 -          -
+---------------------------------------------------------------------          -
+-          Assures correct argument count.                          -          -
+--------------------------------------------------------------------------------
+-     Weaknesses                                                               -
+--------------------------------------------------------------------------------
+-          No built in unit tests                                   -          -
+---------------------------------------------------------------------          -
+-          My procedure to find the best split is inefficient       -  Chris   -
+---------------------------------------------------------------------          -
+-          Cannot handle continuous values                          -          -
+--------------------------------------------------------------------------------
+-          Potentially complicateted equations and structures are   -          -
+-          not well explained and can be difficult to follow.       -   Ivo    -
+---------------------------------------------------------------------          -
+-          Not commented well at all.                               -          -
+--------------------------------------------------------------------------------
+-          Only uses a greedy approach.  Will not necessarily be    -          -
+-          the best solution.                                       -          -
+---------------------------------------------------------------------          -
+-          Some comments, but not sufficient for the complexity of  -          -
+-          the code                                                 - Brandon  -
+---------------------------------------------------------------------          -
+-          No error handling                                        -          -
+---------------------------------------------------------------------          -
+-          Code is not dynamic enough to be expanded, needs to be   -          -
+-          refactored.                                              -          -
+--------------------------------------------------------------------------------
+-          The variable names are very convoluted. The data         -          -
+-          structures in general would need to be refactored and    -   Alan   -
+-          individually evaluated for necessity.                    -          -
+---------------------------------------------------------------------          -
+-          Doesn't reuse confusion matrix code.                     -          -
+--------------------------------------------------------------------------------
+-          May print unaligned confusion matrices.                  -          -
+---------------------------------------------------------------------          -
+-          Runs through entire dataset in search of classes for     -          -
+-          confusion matrices before training; slightly inefficient -  Teddy   -
+---------------------------------------------------------------------          -
+-          Greedily handles entropy for max gain; hard to upgrade   -          -
+--------------------------------------------------------------------------------

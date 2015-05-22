@@ -1,0 +1,94 @@
+Document to help us see what libraries depend on what and how to install them.
+Right now this doc refers to SciPy and NumPy, with ATLAS and LAPACK as the 
+dependencies.
+
+ATLAS library needs the processer to NOT THROTTLE, but Alamode's machines 
+have throttling on, and turning it off needs root controls.  What do we do????
+
+Installs taking from the following link:
+http://scipy.org/Installing_SciPy/Linux
+
+Scipy 0.6.0 (compatible with NumPy 1.0.3.1 and later)
+  NumPy  1.0.4
+	Atlas  (latest is 3.8, guide does it with 3.3.3...)
+		lapack (linear algebra) 3.1.1
+
+Python 2.5.1 (Alamode)
+
+------------------------
+DESCRPTIONS OF LIBRARIES
+------------------------
+
+LAPACK 
+	simultaneous linear equations
+	least-squares solutions of lin sys of eq
+	eigenvalue problems
+	QR decomposition
+
+ATLAS
+	automaticlly generate an optimized BLAS library (used by LAPACK)
+	creates an optimized library for the particular install
+	allows complicated LA operations to be very efficient
+
+NumPy
+	Adds support for large, multi-D arrays and matrices
+	large library of functions to operate on the them
+
+SciPy
+	provides more functionality, matlab like
+	library of algorithms and mathematical tools
+	modules for optimization, integration, special functions, 
+	signal/image processing, genetic algorithms, ODE solvers
+	basic datastructure is array provided in NumPy
+
+-------------
+INSTALL
+-------------
+
+Install LAPACK:
+
+wget http://www.netlib.org/lapack/lapack-3.1.1.tgz
+tar zxvf lapack-3.1.1.tgz
+cd lapack-3.1.1
+cp INSTALL/make.inc.gfortran make.inc
+
+edit make.inc with the following:
+
+OPTS = -O2 -fPIC             (Note, first value is letter O, not zero, second value is a number. same as below)
+NOOPT = -O0 -fPIC
+
+run make:
+
+cd SRC
+make
+
+This creates lapack_LINUX.a in the head lapack directory.
+
+Install ATLAS:
+
+wget http://downloads.sourceforge.net/math-atlas/atlas3.8.0.tar.bz2
+tar jxvf atlas3.8.0.tar.bz2
+cd ATLAS
+mkdir ATLAS_LINUX
+cd ATLAS_LINUX
+../configure -Fa alg -fPIC --with-netlib-lapack=/path/to/lapack/lapack_LINUX.a
+make
+
+*********** I get an error on the configure because alamode machines have CPU throttling turned on, which makes 
+*********** ATLAS useless.  *punched in the nuts*  /usr/bin/cpufreq-selector -g performance turns it off, but its SUDO
+
+Install NumPy:
+
+wget http://downloads.sourceforge.net/numpy/numpy-1.0.4.tar.gz
+gunzip numpy-1.0.4.tar.gz
+tar xvf numpy-1.0.4.tar
+cd numpy-1.0.4
+python setup.py install
+
+Install SciPy:
+
+wget http://prdownloads.sourceforge.net/scipy/scipy-0.6.0.tar.gz
+gunzip scipy-0.6.0.tar.gz
+tar xvf scipy-0.6.0.tar
+cd scipy-0.6.0
+python setup.py install --PREFIX=$MYDIR

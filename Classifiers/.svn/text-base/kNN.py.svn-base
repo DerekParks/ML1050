@@ -1,0 +1,410 @@
+import random
+import math
+from Classifier import Classifier
+from ML1050.Utils.Enum import Enum
+from ML1050.Example import LabeledExample
+
+class kNN_Modes(Enum) :
+    #default constructor
+    def __init__( self ) :
+        Enum.__init__( self, "Sweep ZeroOne Function" )
+
+
+class kNN(Classifier):
+    """A kNN classifer.
+    
+    This classifier can handle four different classification methods: Function,
+    Sweep and ZeroOne.  "Function" performs a standard distance operation
+    (default is Euclidean distance) between the test example and every other
+    point in the training set.  "Sweep" performs very similar to the "Function"
+    method.  However, to optimize performance, the "Sweep" method uses a
+    version of the planesweep algorithm to narrow the search radius when
+    finding the nearest neighbors. The "ZeroOne" method is for non-numerical
+    examples. The distance between 2 points starts out as the total number of
+    attributes.  Then, for each attribute which is identical between the two
+    points the distance value is decrimented.  The closest neighbor has the
+    smallest distance value.
+    
+    
+    This unit test will ensure that Function, Sweep and ZeroOne are working
+    properly.
+    
+    >>> from ML1050.TrainingSet import createTrainingSet
+    >>> ex1 = LabeledExample(['y', 1, 1])
+    >>> ex2 = LabeledExample(['y', 3, 3])
+    >>> ex3 = LabeledExample(['y', 2, 1])
+    >>> ex4 = LabeledExample(['n', 9, 9])
+    >>> ex5 = LabeledExample(['n', 8, 9])
+    >>> ex6 = LabeledExample(['n', 9, 8])
+    >>> trainingSet = createTrainingSet([ex1, ex2, ex3, ex4, ex5, ex6])
+    >>> node = LabeledExample([None, 2, 2])
+    >>> k = kNN(3, 2)
+    >>> k.train(trainingSet)
+    >>> print k.classify(node)
+    y
+    >>> k = kNN(3, 0)
+    >>> k.train(trainingSet)
+    >>> print k.classify(node)
+    y
+    >>> ex7 = LabeledExample(['y', 'a', 'a', 'a'])
+    >>> ex8 = LabeledExample(['n', 'b', 'b', 'b'])
+    >>> trainingSet = createTrainingSet([ex7, ex8])
+    >>> node = LabeledExample([None, 'a', 'a', 'b'])
+    >>> k = kNN(1, 1)
+    >>> k.train(trainingSet)
+    >>> print k.classify(node)
+    y
+
+    """
+    
+    def __init__( self, k, mode = 0, distanceFunction = None) :
+        self.k = k
+        Classifier.__init__( self)
+        self.logger.setDebugLevel( 0 )
+        self.logger.setFileDebugLevel( 3 )
+        self.distances = {}
+        self.mode = mode
+        self.dist = distanceFunction
+        if(self.dist == None):
+            self.dist = self.calculateDistance
+        
+    def train(self, trainingSet, dataWeights = []):
+        """Training for kNN in Sweep mode is a three step process.  The first
+        is to simply store the training set. The second is to normalize the
+        training set data between 0 and 1.  Lastly is to initialize the
+        confusion matrix by sending in possible class labels.
+        """
+    
+        # Regardless of the mode, we must save the training set
+        self.trainingSet = trainingSet
+        
+        # Function mode does not require any other training, but the sweep,
+        # method as explained above, requires 2 more steps as follows
+        if(self.mode == kNN_Modes().Sweep) :
+            self.logger.write("kNN: train - Training classifier", 1);
+            self.sortedAttrs = [[] for i in range(0, len(trainingSet))]
+            self.maxAttrValues = [None for i in range(0, len(trainingSet[0]))]
+            self.minAttrValues = [None for i in range(0, len(trainingSet[0]))]
+            self.normalizedTrainingSet = []
+            
+            # extract max and min attribute values
+            for i in range(0, len(trainingSet)):
+                for j in range(0, len(trainingSet[i])):
+                    if(self.maxAttrValues[j] == None):
+                        self.maxAttrValues[j] = trainingSet.__getitem__(i)[j]
+                        self.minAttrValues[j] = trainingSet.__getitem__(i)[j]
+                    elif self.maxAttrValues[j] < trainingSet.__getitem__(i)[j]:
+                        self.maxAttrValues[j] = trainingSet.__getitem__(i)[j]
+                    elif self.minAttrValues[j] > trainingSet.__getitem__(i)[j]:
+                        self.minAttrValues[j] = trainingSet.__getitem__(i)[j]
+            
+            # normalize data and fill sortedAttrs; 0th index is the id, 1st
+            # index is the value
+            for i in range(0, len(trainingSet)):
+                tempPattern = []
+                for j in range(0, len(trainingSet[i])):
+                    tempPattern.append(self.normalize(trainingSet.__getitem__(i)[j], self.minAttrValues[j], self.maxAttrValues[j]))
+                self.sortedAttrs[i].append(tempPattern[0])
+                self.sortedAttrs[i].append(i)
+                self.normalizedTrainingSet.append( LabeledExample(tempPattern, label=trainingSet[i].label) )
+            self.sortedAttrs.sort()
+            for i in range(0, len(self.normalizedTrainingSet)) :
+                self.logger.write(str(i) + str(self.normalizedTrainingSet[i]), 1)
+
+    def normalize(self, x, min, max):
+        """Normalizes a data value 'x' between 0 and 1 based on a given range"""
+        return abs((float)(x-min)/(max-min))
+    
+    def classify(self, node):
+        '''
+        This function classifies the given tuple (node) based on the
+        current classification mode (kNN_Mode enumeration).  Because this test
+        function really classifies, it will be renamed in the future when
+        the classifiers are more object oriented.
+        '''
+        # Initialize class label to none
+        classLabel = None
+        
+        if(self.mode == kNN_Modes().Sweep) :
+            self.logger.write("\n\nUsing krausSweep to classify " + str(node), 1)
+            return  self.krausSweep(node)
+        # Otherwise its Function or ZeroOne
+        else :
+            if(self.mode == kNN_Modes().Function) :
+                for example in self.trainingSet:
+                    d = self.dist(example, node)
+                    # Keep all the examples that are the same distance away in a
+                    # list that is keyed by that distance.
+                    distList = self.distances.get(d, [])
+                    distList.append(example)
+                    self.distances[d] = distList
+            else :
+                for example in self.trainingSet:
+                    d = self.calculateZeroOneDistance(example, node)
+                    # Keep all the examples that are the same distance away in a
+                    # list that is keyed by that distance.
+                    distList = self.distances.get(d, [])
+                    distList.append(example)
+                    self.distances[d] = distList
+            # Now find the closest examples to the node
+            sortedDists = self.distances.keys()
+            sortedDists.sort()
+            kNearestNeighbors = []
+            neighborsNeeded = self.k
+            for d in sortedDists:
+                neighborsAtD = self.distances[d]
+                if len(neighborsAtD) < neighborsNeeded:
+                    kNearestNeighbors.extend(neighborsAtD)
+                    neighborsNeeded -= len(neighborsAtD)
+                    if neighborsNeeded == 0:
+                        break
+                else:                   # We have more neighbors than we need
+                    random.shuffle(neighborsAtD)
+                    kNearestNeighbors.extend(neighborsAtD[0:neighborsNeeded])
+                    break
+            # Each of the k nearest neighbors gets a vote
+            votes = {}
+            for neighbor in kNearestNeighbors:
+                votes[neighbor.label] = votes.get(neighbor.label, 0) + 1
+            listOfVotes = [ (num, label) for label, num in votes.items() ]
+            listOfVotes.sort()
+            numVotes, classLabel = listOfVotes[-1]
+            
+            return classLabel
+    
+    def __call__(self, example):
+        """
+        Calling an instance like a function is used to test a new example
+
+        >>> from ML1050.TrainingSet import createTrainingSet
+        >>> example3 = LabeledExample(['+', 'c', 'c', 'c', 'q'])
+        >>> example4 = LabeledExample(['-', 'a', 'b', 'd', 'r'])
+        >>> example5 = LabeledExample(['+', 'e', 'e', 'd', 'q'])
+        >>> example6 = LabeledExample(['+', 'c', 'e', 'e', 'r'])
+        >>> example7 = LabeledExample(['+', 'c', 'e', 'e', 'r'])
+        >>> example8 = LabeledExample(['-', 'a', 'a', 'b', 'r'])
+        >>> trainingSet = createTrainingSet([example3, example4, example5, example6, example7, example8])
+        >>> node = LabeledExample([None, 'c', 'e', 'd', 'q'])
+        >>> k = kNN(3, "ZeroOne")
+        >>> k.train(trainingSet)
+        >>> k(node)
+        +
+        """
+        return self.test(example)
+
+    # This function accepts as arguments the x and y coordinates of a new point
+    # that we have to classify, as well as the number of points (k) that will be
+    # voting.  It will return the class that the majority of the k nearest points
+    # are.
+    def krausSweep(self, newPoint) :
+        # This function is inspired by planesweep, modified to find the closest k
+        tempPattern = []
+        for j in range(0, len(self.trainingSet[0])) :
+            tempPattern.append(self.normalize(newPoint[j], self.minAttrValues[j], self.maxAttrValues[j]))
+        newPoint = tempPattern
+        # points to the new given point we have.
+        # The first step is to find where in the ordered set of x coordinates of
+        # all our training points we would fall.
+        sortAttrIndex = self.findAttrIndex(newPoint[0])
+        # Once we have the index of where this point would be, start working our
+        # way down (left) across the x plane.
+        currentIndex = sortAttrIndex
+        # The distance of the currently furthest neighbor in our list
+        maxDist = 0
+        # The instance of the currently furthest neighbor in our list
+        maxDistIndex = -1
+        currentNearest = []
+        # We want to count the total number of point examined so that we know 
+        # for sure the algorithm is helping
+        totalPointsExamined = 0
+        # This while loop will go until we've found at least k points, and gone
+        # as far left as the furthest point away that we've found so far.  This 
+        # will ensure that we have found the closet k points if only examining 
+        # the left side.
+        while(currentIndex > 0 and (maxDist > (newPoint[0]-self.sortedAttrs[currentIndex-1][0]) or len(currentNearest) < self.k)) :
+            totalPointsExamined+=1
+            # We're going to grab the next point to the left (travelling along 
+            # the x axis), and examine it.
+            currentIndex -= 1
+            trainingSetIndex = self.sortedAttrs[currentIndex][1]
+            currentPoint = self.normalizedTrainingSet[trainingSetIndex]
+            self.logger.write("\n\nExamining point number " + str(totalPointsExamined), 3)
+            self.logger.write("The next point to the left is " + str(self.sortedAttrs[currentIndex]), 2)
+            # Calculate the distance from the point in question to the next 
+            # point we've found to the next point we run into moving to the left
+            distance = self.calculateDistance(newPoint, currentPoint)
+            self.logger.write("Distance = " + str(distance), 1)
+            self.logger.write("Max Distance = " + str(maxDist), 1)
+            if(distance == -1) :
+                self.logger.write("Error in calculating distance, bailing out", 0)
+                return(-1)
+            if(len(currentNearest) < self.k) :
+                # Create a structure that holds this point and it's distance 
+                # from the new point
+                #thisPoint = []
+                #for i in range(0, len(newPoint)) :
+                #    thisPoint.append(newPoint[i])
+                #thisPoint.append(distance)
+                thisPoint = [currentPoint, trainingSetIndex, distance]
+                currentNearest.append(thisPoint)
+                if(distance > maxDist) :
+                    maxDist = distance
+                    maxDistIndex = len(currentNearest)-1
+            elif(len(currentNearest) > self.k) :
+                self.logger.write("Error in the krausSweep algorithm, bailing out", 0)
+                return(-1)
+            elif(distance < maxDist) :
+                # This means that our point that we found is closer than the kth
+                # furthest point we had previously found.  We replace the 
+                # furthest neighbor 
+                #thisPoint = []
+                #for i in range(0, len(newPoint)) :
+                #    thisPoint.append(newPoint[i])
+                #thisPoint.append(distance)
+                thisPoint = [currentPoint, trainingSetIndex, distance]
+                #currentNearest.append(thisPoint)
+                currentNearest[maxDistIndex] = thisPoint
+                maxDist = 0
+                # Now we have to recalculate the furthest point
+                for i in range (0, self.k) :
+                    if(currentNearest[i][2] > maxDist) :
+                        maxDist = currentNearest[i][2]
+                        maxDistIndex = i
+                        self.logger.write("New maxDist = " + str(maxDist), 2)
+        currentIndex = sortAttrIndex
+        while(currentIndex < len(self.trainingSet) and (maxDist > (self.sortedAttrs[currentIndex][0]-newPoint[0]) or len(currentNearest) < 2*self.k)) :
+            totalPointsExamined+=1
+            currentPoint = self.normalizedTrainingSet[self.sortedAttrs[currentIndex][1]]
+            self.logger.write("\n\nExamining point number " + str(totalPointsExamined), 3)
+            self.logger.write("The next point to the right is " + str(self.sortedAttrs[currentIndex]), 2)
+            # Calculate the distance from the point in question to the next 
+            # point we've found to the next point we run into moving to the left
+            distance = self.calculateDistance(currentPoint, currentPoint)
+            self.logger.write("Distance = " + str(distance), 1)
+            self.logger.write("Max Distance = " + str(maxDist), 1)
+            if(distance == -1) :
+                self.logger.write("Error in calculating distance, bailing out", 0)
+                return(-1)
+            # Create a structure that holds this point and it's distance from 
+            # the new point
+            if(len(currentNearest) < 2*self.k) :
+                # Create a structure that holds this point and it's distance 
+                # from the new point
+                #thisPoint = []
+                #for i in range(0, len(newPoint)) :
+                #    thisPoint.append(newPoint[i])
+                #thisPoint.append(distance)
+                thisPoint = [currentPoint, trainingSetIndex, distance]
+                currentNearest.append(thisPoint)
+                if(distance > maxDist) :
+                    maxDist = distance
+                    maxDistIndex = len(currentNearest)-1
+            elif(len(currentNearest) > 2*self.k) :
+                self.logger.write("Error in the krausSweep algorithm, bailing out", 0)
+            elif(distance < maxDist) :
+                # This means that our point that we found is closer than the kth
+                # furthest point we had previously found.  We replace the 
+                # furthest neighbor 
+                #thisPoint = []
+                #for i in range(0, len(newPoint)) :
+                #    thisPoint.append(newPoint[i])
+                #thisPoint.append(distance)
+                thisPoint = [currentPoint, trainingSetIndex, distance]
+                #currentNearest.append(thisPoint)
+                currentNearest[maxDistIndex] = thisPoint
+                maxDist = 0
+                # Now we have to recalculate the furthest point
+                for i in range (0, self.k) :
+                    if(currentNearest[i][2] > maxDist) :
+                        maxDist = currentNearest[i][2]
+                        maxDistIndex = i
+                        self.logger.write("New maxDist = " + str(maxDist), 2)
+            currentIndex += 1
+        for i in range (0, self.k) :
+            thisPoint = currentNearest[i]
+            distance = thisPoint[2]
+            pointAttrs = thisPoint[0]
+            #self.logger.write("Someone didn't label this so it gets commented out" + str(i), 1)
+            
+            #for j in range (0, len(pointAttrs)) :
+            #    self.logger.write(pointAttrs[j], 0)
+        for i in range (2*self.k-1, 0, -1) :
+            for j in range (0, i-1) :
+                if currentNearest[j][2] < currentNearest[j+1][2] :
+                    currentNearest[i], currentNearest[i+1] = currentNearest[i+1], currentNearest[i]
+        closestAttr = {}
+        # Count up the total votes from all the k nearest nodes
+        for i in range (0, self.k) :
+            vote = self.trainingSet[currentNearest[i][1]].label
+            self.logger.write("Found a voter of type " + str(vote), 1)
+            if closestAttr.has_key(self.trainingSet[currentNearest[i][1]].label):
+                closestAttr[self.trainingSet[currentNearest[i][1]].label]+=1
+            else:
+                closestAttr[self.trainingSet[currentNearest[i][1]].label]=1
+        # Find out which is the max
+        currentMax = 0
+        maxKey = -1
+        for keys in closestAttr.keys() :
+            if closestAttr[keys] > currentMax :
+                currentMax = closestAttr[keys]
+                maxKey = keys
+        
+        # Finally, return the max
+        return maxKey
+
+    # This function will find the index in our training data that our point would
+    # have fit into.  This will be a simple search algorithm that will run in 
+    # O(log(n))
+    def findAttrIndex(self, x) :
+        length = len(self.sortedAttrs)
+        min = 0
+        max = length-1
+        index = max-(max-min)/2
+        while((max-min)>1) :
+            value = self.sortedAttrs[index][0]
+            if(x>value) :
+                min = index
+                index = max-(max-min)/2
+            else :
+                max = index
+                index = min+(max-min)/2
+        self.logger.write("Index ended up being: " + str(max), 2)
+        self.logger.write("The index value is: " + str(self.sortedAttrs[max][0]), 2)
+        return max
+  
+    def calculateDistance(self, point1, point2) :
+        # Note: Right now this assumes that the data is already normalized
+        if(len(point1) != len(point2)) :
+            self.logger.write("ERROR: New point has a different number of ",
+            "attributes than the currently trained data", 0);
+            self.logger.writeList(point1, 2)
+            self.logger.writeList(point2, 2)
+            return -1
+        self.logger.write("Point1 = " + str(point1), 3)
+        self.logger.write("Point2 = " + str(point2), 3)
+        total = 0
+        for i in range (0, len(point1)) :
+            diff = point1[i]-point2[i]
+            total += pow(diff, 2)
+        return(math.sqrt(total))
+        
+    def calculateZeroOneDistance(self, point1, point2) :
+        dist = len(point1)
+        for i in range(len(point1)):
+            if point1[i] == point2[i]:
+                dist -= 1
+        return dist
+
+
+def _test() :
+    """Run the tests in the documentation strings."""
+    import doctest
+    return doctest.testmod(verbose=True)
+
+if __name__ == "__main__":
+    try:
+        __IP                            # Are we running IPython?
+    except NameError:
+        _test()                         # If not, run the tests
+
+
