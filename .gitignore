@@ -55,5 +55,8 @@ docs/_build/
 
 # PyBuilder
 target/
+<<<<<<< HEAD
 
 .svn
+=======
+>>>>>>> 7059baea9b475ef524cc55ba5bc8f13348cac994
